@@ -11,9 +11,9 @@ from flask_cors import CORS
 
 flask_app = Flask(__name__)
 CORS(flask_app)
-app = Api(app = flask_app, 
-		  version = "1.0", 
-		  title = "ML Flask App", 
+app = Api(app = flask_app,
+		  version = "1.0",
+		  title = "ML Flask App",
 		  description = "Predict results using a trained model")
 
 class PredictModel(Resource):
@@ -52,7 +52,7 @@ class PredictModel(Resource):
             model.add(Dense(128, activation='relu'))
             #model.add(Dropout(0.3))
             model.add(Dense(10, activation = 'softmax'))
-            
+
             #Fit data
             model.fit(x_train, y_train, epochs=8, validation_data=(x_test, y_test))
             return 1
@@ -63,4 +63,4 @@ class PredictModel(Resource):
 app.add_resource(PredictModel, '/model')
 
 if __name__ == "__main__":
-    flask_app.run(debug=True)
+    flask_app.run(host="0.0.0.0", port=80, debug=True)
