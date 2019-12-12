@@ -20,7 +20,7 @@ class App extends Component {
         optimizer: '',
         epochs: 1,
         batch_size: 1,
-        validation_split: 1
+        dropout: 0
       },
       result: ""
     };
@@ -40,8 +40,9 @@ class App extends Component {
     const formData = this.state.formData;
     console.log(formData);
     this.setState({ isLoading: true });
-    let results = await API.get("/model", { params: { data: this.state.formData } });
-    this.setState({ isLoading: false });
+    let returned = await API.get("/model", { params: { loss: this.state.formData.loss, optimizer: this.state.formData.optimizer, epochs: this.state.formData.epochs, batch_size: this.state.formData.batch_size, dropout: this.state.formData.dropout  } });
+    console.log(returned);
+    this.setState({ isLoading: false, result: returned.data.result });
   }
 
   handleCancelClick = (event) => {
@@ -89,9 +90,9 @@ class App extends Component {
                   name="epochs"
                   onChange={this.handleChange}>
                   <option>1</option>
+                  <option>4</option>
+                  <option>8</option>
                   <option>16</option>
-                  <option>32</option>
-                  <option>64</option>
                 </Form.Control>
               </Form.Group>
               <Form.Group as={Col}>
@@ -108,16 +109,16 @@ class App extends Component {
                 </Form.Control>
               </Form.Group>
               <Form.Group as={Col}>
-                <Form.Label>Validation Split</Form.Label>
+                <Form.Label>Dropout</Form.Label>
                 <Form.Control 
                   as="select"
-                  value={formData.validation_split}
-                  name="validation_split"
+                  value={formData.dropout}
+                  name="dropout"
                   onChange={this.handleChange}>
-                  <option>.9</option>
-                  <option>.8</option>
-                  <option>.7</option>
-                  <option>.6</option>
+                  <option>0.0</option>
+                  <option>0.1</option>
+                  <option>0.2</option>
+                  <option>0.3</option>
                 </Form.Control>
               </Form.Group>
             </Form.Row>
